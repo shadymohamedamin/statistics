@@ -4,6 +4,16 @@ typedef long long ll;
 typedef const unsigned int cu;
 typedef long double ld;
 using namespace std;
+/*float geometric(vector<int>&v)
+{
+	float shady = 0;
+	for (int i = 0;i < v.size();i++)
+	{
+		shady += log(v[i]);
+	}
+	shady = shady / v.size();
+	return exp(shady);
+}*/
 int main() {
 	/*#ifndef ONLINE_JUDGE
 		FILE* stream;
@@ -17,15 +27,12 @@ int main() {
 		cout << "couldnt open this file please fix the error and try again";
 		return EXIT_FAILURE;
 	}
-	//ll n;
-	//cout << "enter the number of rows which you want to distribute the data (number of class interval)" << endl;
-	//cin >> n;
-	//cout << n << "n";
 	vector<ll>v;
 	ll mx = INT_MIN, mn = 1e9 + 1;
 	ll sum1 = 0;
 	ll f = 1;
-	ll harm = 0;
+	float harm = 0;
+	float geo = 0;
 	while (!myfile.eof())
 	{
 		ll a;
@@ -34,19 +41,18 @@ int main() {
 		mx = max(mx, a);
 		mn = min(mn, a);
 		sum1 += a;
-		f =f*a;
-		//harm += (double)(1 / a);
-		//cout << f << endl;
-		//if (a == 0) cout << "stop"<<endl;
+		geo += log(a);
+		harm += (double)1/a;
 	}
-	cout << v.size() << endl;
-	cout << mx << endl;
-	cout << mn << endl;
-	cout <<(double) sum1 / v.size() << endl;
+	
+	cout << v.size() <<"			the size of elements"<<endl;
+	cout << mx <<"			the maxinmum element"<< endl;
+	cout << mn <<"			the minimum element"<< endl;
+	cout <<(double) sum1 / v.size() <<"			arithmetic mean"<< endl;
 	ll sum2 = 0, sum3 = 0;
 	//cout << v[0] << " " << v[99];
 	//cout << v[88];
-	for (int i =10 ;i <89;i++)
+	for (int i =10 ;i <89;i++)//v.size()-1-trimed mean
 	{
 		sum2 += v[i];
 	}
@@ -54,465 +60,49 @@ int main() {
 	{
 		sum3 += v[i];
 	}
-	cout << (double)sum2 / 80 << endl;
-	cout << (double)sum3 / 60 << endl;
-	cout << f << endl;
-	harm = (double)(1 /2 )+ (double)(1 / 4)+ (double)(1 /6 )+ (double)(1 /100 );
-	cout << 4 / harm << endl;
-	//cout << pow(f,0.01);
-	//ll width_interval = (ll)(mx - mn) / n;
-	//vector<pair<ll,ll> >interval(n, 0);
-	//ll temp = mn;
-	//sort(v.begin(), v.end());
-	/* for (ll i = 0;i < 100;i++)
-	 {
-		 cout << rand() % 100 + 1<<endl;
-	 }*/
-
-	/*while (temp < mx)
+	cout << (double)sum2 / 80 <<"			10% trimmed mean"<< endl;
+	cout << (double)sum3 / 60 << "			20% trimmed mean" << endl;
+	cout << (double)exp(geo/v.size()) <<"			geometric mean"<< endl;
+	cout << (float)v.size() / harm <<"			harmonic mean"<< endl;
+	sort(v.begin(), v.end());
+	cout << (double)(v[49]+v[50]) / 2 <<"			median"<< endl;
+	cout << (double)(mx + mn) / 2 <<"			midrange"<< endl;
+	int mxx1 = 0,mxx2=0,mxx3=0,el1=0,el2=0,el3=0;
+	map<int, int>mp;
+	for (int i = 0;i < v.size();i++)
+		mp[v[i]]++;
+	for (auto& i : mp)
 	{
-		cout << temp << " " << temp + width_interval;
-		ll c = 0;
-		for (ll i = 0;i < v.size();i++)
+		if (i.second > mxx1)
 		{
-			if (v[i] >= temp && v[i] <= temp + width_interval)
-			{
-				c++;
-			}
-			// if (temp + width_interval < v[i])
-			  //   break;
-			 //else break;
+			mxx1 = i.second;
+			el1 = i.first;
 		}
-		cout << " " << c << "  " << (double)c / v.size() * 100 << endl;
-		temp += width_interval + 1;
-	}*/
-
-
-
+	}
+	for (auto& i : mp)
+	{
+		if (i.second > mxx2&&i.first!=el1)
+		{
+			mxx2 = i.second;
+			el2 = i.first;
+		}
+	}
+	for (auto& i : mp)
+	{
+		if (i.second > mxx3&& i.first != el1&& i.first != el2)
+		{
+			mxx3 = i.second;
+			el3 = i.first;
+		}
+	}
+	//cout << mxx1 << " " << mxx2 << " " << mxx3 << endl;
+	if (mxx1 > mxx2 && mxx1 > mxx3) cout << mxx1 << "			unimodal" << endl;
+	//else if (mxx1 == mxx2 && mxx2 == mxx3) cout << mxx1 << "			multimodel"<< endl;
+	else if (mxx1 == mxx2 && mxx1 != mxx3) cout << mxx1 << "			biomodal" << endl;
+	else if (mxx1 == mxx3 && mxx1 != mxx2) cout << mxx1 << "			biomodal" << endl;
+	else cout << mxx1 << "			multimodal" << endl;
+	
 
 	myfile.close();
 	return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*#include <iostream>
-#include<bits/stdc++.h>
-#include <sstream>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-#define all(v)			((v).begin()), ((v).end())
-#define sz(v)			((int)((v).size()))
-#define clr(v, d)		memset(v, d, sizeof(v))
-
-const int MAX = 300;
-typedef int big[MAX];
-
-void big_zero(big num)			// b = 0
-{
-	int i;
-	for (i = 0; i < MAX; i++)
-		num[i] = 0;
-}
-
-void big_copy(big to, big from)	// to <-- from
-{
-	int i;
-	for (i = 0;i < MAX;i++)
-		to[i] = from[i];
-}
-
-int big_len(big num)
-{
-	int j;
-	for (j = MAX - 1; j && !num[j]; j--);
-	return j;
-}
-
-void big_print(big num)
-{
-	int i;
-	for (i = big_len(num); i >= 0; i--)
-	{
-		cout << num[i];
-		if (i && !(i % 3))
-			cout << ',';
-	}
-	cout << "\n";
-}
-
-void big_from_str(big num, string str)	// num = reverse(str)
-{
-	int i, len = str.size() - 1;
-	big_zero(num);
-
-	for (i = len;i > -1;i--)
-		num[len - i] = str[i] - '0';
-}//153-->153  00153-->153
-
-string bit_to_str(big num)
-{
-	ostringstream oss;
-	for (int i = big_len(num); i >= 0; i--)
-		oss << num[i];
-	return oss.str();
-}
-
-
-void big_from_int(big num, int x)
-{
-	int len = 0;
-	big_zero(num);
-
-	while (x)
-	{
-		num[len++] = x % 10;
-		x /= 10;
-	}
-}
-
-int big_cmp(big a, big b)		// a <=> b return 1, 0, -1
-{
-	int i;
-	for (i = MAX - 1; i >= 0; i--)
-	{
-		if (a[i] > b[i])
-			return 1;
-		else if (a[i] < b[i])
-			return -1;
-	}
-	return 0;
-}
-
-void big_add(big ac, int n)	//add n over a
-{
-	int i, num, carry = n;
-	for (i = 0;i < MAX && carry;i++)
-	{
-		num = ac[i] + carry;
-		ac[i] = num % 10;
-		carry = num / 10;
-	}
-}
-
-void big_add(big a, big b, big result)	// result = a + b
-{
-	int i, carry = 0;
-	for (i = 0; i < MAX; i++)
-	{
-		result[i] = carry + a[i] + b[i];
-		carry = result[i] / 10;
-		result[i] %= 10;
-	}
-}
-
-char big_sub(big a, big b, big result, char sign = '+')
-{
-	if (big_cmp(a, b) < 0)
-		return big_sub(b, a, result, '-');
-
-	big_zero(result);
-	int len_a = big_len(a);
-	int len_b = big_len(b);
-
-	int i, max = len_a > len_b ? len_a : len_b;
-
-	for (i = 0;i <= max;i++)
-		result[i] = a[i] - b[i];
-
-	for (i = 0;i <= max;i++)
-	{
-		while (result[i] < 0)
-		{
-			result[i] += 10;
-			result[i + 1] -= 1;
-		}
-	}
-	return sign;
-}
-
-void big_product(big result, int factor)
-{
-	int carry = 0;
-	for (int i = 0; i < MAX; i++)
-	{
-		carry += result[i] * factor;
-		result[i] = carry % 10;
-		carry /= 10;
-	}
-}
-//Work with leading zeros
-void big_product(big a, big b, big result)
-{
-	int len_a = big_len(a);
-	int len_b = big_len(b);
-
-	if (len_a < len_b)
-	{
-		big_product(b, a, result);
-		return;
-	}
-
-	big_zero(result);
-	int i, j;
-
-	int cursor = 0, pos = 0;
-
-	for (i = 0; i <= len_b; pos = 0, cursor++, i++)
-	{
-		for (j = 0; j <= len_a; j++, pos++)
-		{
-			result[pos + cursor] += b[i] * a[j];
-
-			if (result[pos + cursor] >= 10)
-			{
-				result[pos + cursor + 1] += result[pos + cursor] / 10;
-				result[pos + cursor] %= 10;
-			}
-		}
-	}
-}
-
-int big_divide(big ac, int div)
-{
-	int i = big_len(ac);
-	int reminder = 0;
-
-	while (i >= 0)
-	{
-		reminder = reminder * 10;
-		reminder = reminder + ac[i];
-		ac[i] = 0;
-
-		if (div <= reminder)
-		{
-			ac[i] = reminder / div;
-			reminder %= div;
-		}
-		i--;
-	}
-	return reminder;
-}
-
-void big_divide(big ac, big div, big reminder)
-{
-	big cpy;
-	big_zero(reminder);
-
-	int i = big_len(ac);
-
-	while (i >= 0)
-	{
-		big_product(reminder, 10);
-		big_add(reminder, ac[i]);
-		ac[i] = 0;
-
-		while (big_cmp(reminder, div) >= 0) //Insted of /, % is >= right or only >
-		{
-			big_sub(reminder, div, cpy);	//cpy = reminder-div
-			big_copy(reminder, cpy);		//reminder = cpy
-			ac[i]++;
-		}
-		i--;
-	}
-	big_print(reminder);
-	big_print(ac);
-}
-
-void big_mod(big a, big div, big reminder)
-{
-	big cpy;
-	big_zero(reminder);
-
-	int i = big_len(a);
-
-	while (i >= 0)
-	{
-		big_product(reminder, 10);
-		big_add(reminder, a[i]);
-
-		while (big_cmp(reminder, div) >= 0) //Insted of /, %
-		{
-			big_sub(reminder, div, cpy);	//cpy = reminder-div
-			big_copy(reminder, cpy);		//reminder = cpy
-		}
-		i--;
-	}
-}
-
-void big_gcd(big ac, big bc)	//ac: means big a will be changed
-{
-	big t;
-
-	while (!(bc[0] == 0 && big_len(bc) == 0))
-	{
-		big_mod(ac, bc, t);	//t = a % b
-		big_copy(ac, bc);		//a = b
-		big_copy(bc, t);		//b = t
-	}	//a now represent the gcd
-}
-
-
-void factorial(int n, big fact)	/* Fast untill !1200 */
-/*{
-	int i, j, len;
-
-	big_zero(fact);
-	fact[0] = 1, len = 1;
-
-	for (i = 2; i <= n; i++)
-	{
-		for (j = 0; j < len; j++)
-			fact[j] *= i;
-
-		for (j = 0; j < len; j++)
-		{
-			if (fact[j] >= 10)
-				fact[j + 1] += fact[j] / 10, fact[j] %= 10;
-		}
-
-		while (fact[len])
-			if (fact[len++] >= 10)
-				fact[len] += fact[len - 1] / 10, fact[len - 1] %= 10;
-	}
-}
-
-big remain, odd, answer, temp;	//Set them out side to save memory
-void big_squareRoot(string s)	//Using Pell's equation // TLE
-{
-	long int group, count;
-
-	big_zero(remain);
-	big_zero(odd);
-	big_zero(answer);
-
-	if (s.size() % 2 == 1)
-		s = "0" + s;
-
-	for (int i = 0;i < s.size();i += 2)
-	{
-		group = (s[i] - '0') * 10 + s[i + 1] - '0';
-
-		big_copy(odd, answer);
-		big_product(odd, 20);
-		big_add(odd, 1);
-
-		big_product(remain, 100);
-		big_add(remain, group);
-
-		count = 0;
-		while (big_cmp(remain, odd) >= 0)
-		{
-			count++;
-			big_sub(remain, odd, temp);
-			big_copy(remain, temp);
-			big_add(odd, 2);
-		}
-		big_product(answer, 10);
-		big_add(answer, count);
-	}
-	big_print(answer);	//Contain only the int value //Give TLE
-}
-
-string big_to_str(big num) {
-	ostringstream oss;
-	int i;
-	for (i = big_len(num); i >= 0; i--) {
-		oss << num[i];
-	}
-	return oss.str();
-}
-
-string toBinay(string str) {
-	big a;
-	big_from_str(a, str);
-
-	big zero;
-	big_from_int(zero, 0);
-
-	big two;
-	big_from_int(two, 2);
-
-	big mod;
-	string ret = "";
-
-	while (big_cmp(a, zero) != 0) {
-		big_mod(a, two, mod);
-		ret += big_to_str(mod);
-		big_divide(a, 2);
-	}
-
-	reverse(all(ret));
-	return ret;
-}
-
-string toDecimal(string binary) {
-	big twoPow;
-	big_from_int(twoPow, 1);
-
-	big a;
-	big_zero(a);
-
-	big temp;
-	for (int i = sz(binary) - 1; i >= 0; --i) {
-		if (binary[i] == '1') {
-			big_add(a, twoPow, temp);
-			big_copy(a, temp);
-		}
-
-		big_product(twoPow, 2);
-	}
-	return big_to_str(a);
-}
-
-string fibonaccie(int n)
-{
-	int fib[3][MAX];
-
-	big_from_int(fib[0], 1);
-	big_from_int(fib[1], 1);
-	big_from_int(fib[2], 1);
-
-	for (int i = 2;i < n;i++)
-	{
-		big_add(fib[0], fib[1], fib[2]);
-		big_copy(fib[0], fib[1]);
-		big_copy(fib[1], fib[2]);
-	}
-	return bit_to_str(fib[2]);
-}
-
-int main()
-{
-	//123456789123456789
-	string num1, num2;
-	big a, b, c;
-	//cin >> num1 >> num2;
-	//cout << num1;
-	while (cin >> num1 >> num2)
-	{
-		big_from_str(a, num1);
-		big_from_str(b, num2);
-
-		big_product(a, b, c);
-		big_print(c);
-
-	}
-	return 0;
-}*/
