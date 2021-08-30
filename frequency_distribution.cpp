@@ -10,6 +10,10 @@ int main() {
     freopen_s(&stream, "file_input.txt", "r", stdin);
     freopen_s(&stream, "file_output.txt", "w", stdout);
 #endif*/
+    /*ifstream fin;
+fin.open("input.txt");
+ofstream fout;
+fout.open("output.txt");*/
     string filename("file_input.txt");
     ifstream myfile(filename);
     if (!myfile.is_open())
